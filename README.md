@@ -1,2 +1,2 @@
 # Warehouse_SoftDev
-A repository for the development of warehouse system for Software Dev. class 2018
+A repository for the development of warehouse system in Software Dev. class 2018
