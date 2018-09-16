@@ -1,13 +1,15 @@
 #2222
 class WarehouseManage():
-
-    def __init__(self):
+    def FactoryMethod(self):
         self.A = Warehouse('A')
         self.B = Warehouse('B')
         self.C = Warehouse('C')
         self.D = Warehouse('D')
         self.E = Warehouse('E')
 
+    def __init__(self):
+        self.FactoryMethod()
+    
     def summary(self):
         self.A.summary()
         self.B.summary()
@@ -73,9 +75,9 @@ class WarehouseManage():
             return -1
         elif(eval("self."+hx[0]+".retrieve"+"(\'"+_cmd +"\',"+str(hx[1])+","+str(hx[2])+")")==1):
             hx=self.hash2(_cmd)
-            print("Retreive by rehash...")
+            print("Retrieve by rehash...")
 
-        print("Start to retreive")
+        print("Start to retrieve")
         self.links(hx[0],'FWD')
         print("Retriving a product id "+_cmd+" in warehouse "+str(ord(hx[0])-ord('A')+1)+": "+"row "+str(hx[1])+" slot "+str(hx[2]))
         self.links(hx[0],'BKD')
@@ -206,13 +208,6 @@ class Warehouse():
                 slot=[""]*400
                 self.row[row_index]=slot
 
-        self.robot=False
-        #print(self.row)
-    def robotIn(self):
-        return self.robot
-
-
-
     def summary(self):
         print("Warehouse "+str(ord(self.name)-ord('A')+1))
         print("Number of Rows: "+str(len(self.row)))
@@ -231,6 +226,7 @@ class Warehouse():
             if(printed==0):print("-",end=" ")
             print("")
         print("")
+        
     def store(self,product,row_index,slot_index):
 
         if self.row[row_index][slot_index]=="":
@@ -258,6 +254,7 @@ class belt():
         belt.element.append(product)
         #print(belt.element)
         return 1
+    @staticmethod
     def retrieve():
         if len(belt.element)==0:
             print("The belt is empty")
