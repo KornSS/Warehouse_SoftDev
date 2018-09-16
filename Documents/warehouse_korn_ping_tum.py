@@ -1,27 +1,25 @@
+#2222
 class WarehouseManage():
 
     def __init__(self):
         self.A = Warehouse('A')
         self.B = Warehouse('B')
         self.C = Warehouse('C')
-
         self.D = Warehouse('D')
-
         self.E = Warehouse('E')
 
     def summary(self):
         self.A.summary()
         self.B.summary()
         self.C.summary()
-
         self.D.summary()
-
         self.E.summary()
         print("")
+
     def hash(self,_cmd):
         '''x=chr((ord(_cmd[0])-ord('A'))%5+ord('A'))
         y=int(_cmd[1])
-        z=int(_cmd[2:])'''
+        z=int(_cmd[2:])''' #this is an ordinary straight forward hash function
 
         if ord(_cmd[0]) in range(ord('A'),ord('U')):
             z=int( str( int(_cmd[1])-1 ) + _cmd[2:4] )%400
@@ -34,12 +32,9 @@ class WarehouseManage():
             return -1
         #return x,y,z
 
-
-        #hx1 if warehouse E not fulll
-        #hx2 if warehouse E is full store in warehouse A-C
-        #hx3 if wh A-C is full store in D
     def hash2(self,_cmd):
         return 'D',int(_cmd[1:4])%7,ord(_cmd[0])-ord('A')
+
     def links(self,wh,dir):
         link_next={'A':'','B':'A','C':'A','D':'B,A','E':'B,A'}
         if(dir=='FWD'):
@@ -87,6 +82,7 @@ class WarehouseManage():
         print("Placing product id "+_cmd+" on the belt")
         belt.store(_cmd)
         print("Retrieving successfully!")
+
     def store(self,_cmd):
         if(_cmd in belt.element):
             print("Product is already on the belt")
