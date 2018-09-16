@@ -8,7 +8,7 @@ class WarehouseManage():
         self.E = Warehouse('E')
 
     def __init__(self):
-        self.FactoryMethod()
+        self.FactoryMethod()    
     
     def summary(self):
         self.A.summary()
@@ -112,7 +112,7 @@ class WarehouseManage():
         print("Storing a product id "+_cmd+" in warehouse "+str(ord(hx[0])-ord('A')+1)+": "+"row "+str(hx[1])+" slot "+str(hx[2]))
         self.links(hx[0],'BKD')
         print("Storing successfully!")
-        #for i in range()
+        
     def check(self,a):
         list0159 = [range(48, 58), range(65, 90), range(49, 54), range(48, 58), range(48, 58), range(65, 90), range(49, 54), range(48, 58), range(48, 58)]
         list2 = [range(50, 51), range(49, 54), range(49, 54), range(48, 49), range(48, 49)]
@@ -160,7 +160,7 @@ class WarehouseManage():
             hx=self.hash(self.move_temp[_cmd])
         else:
             hx=self.hash(_cmd)
-        if(eval("self."+hx[0]+".search"+"("+str(hx[1])+","+str(hx[2])+")")==-1):
+        if(eval("self."+hx[0]+".search"+"("+str(hx[1])+","+str(hx[2])+")")==False):
             print("Product not found")
             return -1
         else: print("Found product at "+hx[0]+str(hx[1])+str(hx[2]))
@@ -192,6 +192,7 @@ class Warehouse():
 
         #print(self.row)
         self.name=name
+        self.number_of_product=0
         if(name=='A'or 'B' or 'C'):
             self.row=['']*5
             for row_index in range(len(self.row)):
@@ -211,11 +212,7 @@ class Warehouse():
     def summary(self):
         print("Warehouse "+str(ord(self.name)-ord('A')+1))
         print("Number of Rows: "+str(len(self.row)))
-        total_p=0
-        for row_index in  range(len(self.row)):
-            for slot_index in range(len(self.row[row_index])):
-                if(self.row[row_index][slot_index]!=''):total_p+=1
-        print("Number of total product: "+str(total_p))
+        print("Number of total product: "+str(self.number_of_product))
         for row_index in range(len(self.row)):
             print("Product in row "+str(row_index+1)+": ",end='')
             printed=0
@@ -232,15 +229,18 @@ class Warehouse():
         if self.row[row_index][slot_index]=="":
             self.row[row_index][slot_index]=product
         elif  self.row[row_index][slot_index]==product:
+            self.number_of_product+=1
             return 1
-            #print("stored")
+            
         else: return -1
     def retrieve(self,id,row_index,slot_index):
         if self.row[row_index][slot_index]=="": return -1
         elif self.row[row_index][slot_index]!=id: return 1
-        else: self.row[row_index][slot_index]=""
+        else: 
+            self.row[row_index][slot_index]=""
+            self.number_of_product-=1
     def search(self,row_index,slot_index):
-        if self.row[row_index][slot_index]=="": return -1
+        if self.row[row_index][slot_index]=="": return False
 
 # Create object using factory.
 obj = WarehouseManage()
@@ -253,12 +253,12 @@ class belt():
             print("Belt is full. Cannot retrieve the product.")
         belt.element.append(product)
         #print(belt.element)
-        return 1
+        return True
     @staticmethod
     def retrieve():
         if len(belt.element)==0:
             print("The belt is empty")
-            return -1
+            return False
         pop_element=belt.element.pop(0)
         if pop_element in WarehouseManage.move_temp:
             del WarehouseManage.move_temp[pop_element]
@@ -269,5 +269,3 @@ while(1):
     x=input("Please type a command...")
     obj.command(x)
     print("")
-#obj.store('A125','A',1,25)
-#obj.summary()
