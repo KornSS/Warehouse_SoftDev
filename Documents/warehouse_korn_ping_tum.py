@@ -115,17 +115,33 @@ class WarehouseManage():
         
     def check(self,a):
         list0159 = [range(48, 58), range(65, 90), range(49, 54), range(48, 58), range(48, 58), range(65, 90), range(49, 54), range(48, 58), range(48, 58)]
-        list2 = [range(50, 51), range(49, 54), range(49, 54), range(48, 49), range(48, 49)]
-        if(len(a) == 5 or len(a) == 9):
+        #list2 = [range(50, 51), range(49, 54), range(48,51), range(49, 54), range(48, 49), range(48, 49)]
+        if(len(a) in [5,6,9]):
             if(a[0] in "0159"):
+                if a[0] == '9' and len(a)!=9: return False
                 for i in range(len(a)):
                     if(ord(a[i]) not in list0159[i]):
                         return False
                 return True
             elif(a[0] in "2"):
+                print("I'm currently checking in 2...")
                 for i in range(len(a)):
-                    if (ord(a[i]) not in list2[i]):
-                        return False
+                    if ord(a[1]) in range(ord('1'),ord('3')+1):
+                        if ord(a[2]) not in range(ord('0'),ord('0')+1): return False
+                        if ord(a[3]) not in range(ord('1'),ord('5')+1): return False
+                        print("Passed 1...")
+                    elif ord(a[1]) in range(ord('4'),ord('4')+1):
+                        if ord(a[2]) not in range(ord('0'),ord('0')+1): return False
+                        if ord(a[3]) not in range(ord('1'),ord('7')+1): return False
+                        print("Passed 2...")
+                    elif ord(a[1]) in range(ord('5'),ord('5')+1):
+                        if ord(a[2]) not in range(ord('0'),ord('2')+1): return False
+                        if ord(a[3]) not in range(ord('1'),ord('9')+1): return False 
+                        if a[2] == '2' and a[3]!=0: return False
+                        print("Passed 3...")
+                    else: return False
+                    #if (ord(a[i]) not in list2[i]):
+                    #    return False
                 return True
             elif(a[0] in "34"):
                 if(a[1:] == "0000"):
@@ -238,16 +254,17 @@ class WarehouseManage():
         else: print("Found product at "+hx[0]+str(hx[1])+str(hx[2]))
     def command(self,_cmd):
         _cmd=_cmd.upper()
-        #if self.check(_cmd)==False:
-        #    print("Wrong input \nDumb people!!! Didn't you read the intructions huh???")
-        #    return -1
+        if self.check(_cmd)==False:
+            print("Wrong input \nDumb people!!! Didn't you read the intructions huh???")
+            return -1
+        print("input is right")
         #if (int(_cmd[2])>5 or int(_cmd[2])==0) :
         #    print("Wrong input!4")
         #    return -1
         fn=int(_cmd[0])
         if fn==0: self.retrieve(_cmd[1:5])
         elif fn==1: self.store(_cmd[1:5])
-        elif fn==2: self.sort(_cmd[1],_cmd[2])
+        elif fn==2: self.sort(_cmd[1],_cmd[2:4])
         elif fn==3: belt.retrieve()
         elif fn==4: self.summary()
         elif fn==5: self.search(_cmd[1:5])
