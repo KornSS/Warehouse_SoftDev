@@ -173,6 +173,40 @@ class WarehouseManage():
         self.move_temp[id]=pos
         self.move_temp[pos]='-1'
         #print(self.move_temp)
+    def m_move(self,id,pos):
+        hx=self.hash(id)
+        if id in self.move_temp:
+            if self.move_temp[id]=='-1':
+                print("Cannot found the product with ID: "+id)
+                return -1
+            else:
+                #print("id"+id)
+                pos2=self.move_temp[id]
+                #print("pos2"+pos2)
+                del self.move_temp[pos2]
+                hx=self.hash(pos2)
+                eval("self."+hx[0]+".retrieve"+"(\'"+id+"\',"+str(hx[1])+","+str(hx[2])+")")
+                #print("pos"+pos)
+                self.move_temp[id]=pos
+                hx=self.hash(pos)
+                eval("self."+hx[0]+".store"+"(\'"+id+"\',"+str(hx[1])+','+str(hx[2])+")")
+                #print("movetempid:"+self.move_temp[id])
+                self.move_temp[pos]='-1'
+                hx=self.hash(pos)
+                eval("self."+hx[0]+".store"+"(\'"+"-1"+"\',"+str(hx[1])+','+str(hx[2])+")")
+                #print("movetemppos:"+self.move_temp[pos])
+                print("Move product "+id+" to "+pos)
+                return 1
+        if(eval("self."+hx[0]+".retrieve"+"(\'"+id+"\',"+str(hx[1])+","+str(hx[2])+")")==-1):
+            print("Product id "+id+" not found")
+            return -1
+        if(eval("self."+chr(ord('A')+int(pos[0])-1)+".store"+"(\'"+id+"\',"+str(int(pos[1:2]))+','+str(int(pos[3:]))+")")==-1):
+            print("Slot is occupied. Failed to move.")#--------------------- i'm here
+            return -1
+        print("Move product "+id+" to "+pos)
+        self.move_temp[id]=pos
+        self.move_temp[pos]='-1'
+        #print(self.move_temp)
     def sort(self,x,y):
         dup_product=[]
         for i in eval("self."+chr(ord(x)-ord('1')+ord('A'))+".row["+str(int(y)-1)+"]"):
@@ -204,9 +238,9 @@ class WarehouseManage():
         else: print("Found product at "+hx[0]+str(hx[1])+str(hx[2]))
     def command(self,_cmd):
         _cmd=_cmd.upper()
-        if self.check(_cmd)==False:
-            print("Wrong input \nDumb people!!! Didn't you read the intructions huh???")
-            return -1
+        #if self.check(_cmd)==False:
+        #    print("Wrong input \nDumb people!!! Didn't you read the intructions huh???")
+        #    return -1
         #if (int(_cmd[2])>5 or int(_cmd[2])==0) :
         #    print("Wrong input!4")
         #    return -1
@@ -218,7 +252,7 @@ class WarehouseManage():
         elif fn==4: self.summary()
         elif fn==5: self.search(_cmd[1:5])
         elif fn==6: print(self.move_temp)
-        elif fn==9: self.m_store(_cmd[1:5],_cmd[5:9])
+        elif fn==9: self.m_move(_cmd[1:5],_cmd[5:])
         else:
             print("Wrong input!")
             return -1
