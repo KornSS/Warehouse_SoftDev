@@ -1,4 +1,6 @@
 import random
+import xlsxwriter
+
 class WarehouseManage():
     def FactoryMethod(self):
         self.A = Warehouse('A')
@@ -263,7 +265,29 @@ class WarehouseManage():
             '''if wh in range(1,4): row = random.randint(1,6)
             if wh in range(4,5): row = random.randint(1,8)
             if wh in range(5,6): row = random.randint(1,21)'''
-            
+    def eff_write(self):
+        workbook = xlsxwriter.Workbook('Expenses01.xlsx')
+        worksheet = workbook.add_worksheet()
+        expenses = (
+        ['Rent', 1000],
+        ['Gas',   100],
+        ['Food',  300],
+        ['Gym',    50],
+        )
+        row = 0
+        col = 0
+
+        # Iterate over the data and write it out row by row.
+        for item, cost in (expenses):
+            worksheet.write(row, col,     item)
+            worksheet.write(row, col + 1, cost)
+            row += 1
+
+        # Write a total using a formula.
+        #worksheet.write(row, 0, 'Total')
+        #worksheet.write(row, 1, '=SUM(B1:B4)')
+
+        workbook.close()
     def search(self,_cmd):
         if _cmd in self.move_temp:
             if self.move_temp[_cmd]=='-1':
@@ -397,6 +421,9 @@ class beltCreator():
 obj = WarehouseManage()
 
 while(1):
-    x=input("Please type a command...")
-    obj.command(x)
+    #x=input("Please type a command...")
+    #obj.command(x)
+    obj.eff_write()
+    while(1):
+        j=0
     print("")
