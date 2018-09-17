@@ -1,4 +1,4 @@
-#2222
+import random
 class WarehouseManage():
     def FactoryMethod(self):
         self.A = Warehouse('A')
@@ -105,11 +105,11 @@ class WarehouseManage():
                 return -1
             elif(st==1):
                     print("Product has already added")
-                    return -1
+                    return -3
 
         elif(st==1):
                 print("Product has already added")
-                return -1
+                return -3
         self.links(hx[0],'FWD')
         print("Storing a product id "+_cmd+" in warehouse "+str(ord(hx[0])-ord('A')+1)+": "+"row "+str(hx[1])+" slot "+str(hx[2]))
         self.links(hx[0],'BKD')
@@ -242,6 +242,28 @@ class WarehouseManage():
                 self.store(i)          
                 
         print("Sorting process for warehouse "+str(int(x))+" is complete")
+    def fill(self,i_fill_str):
+        i_fill=int(i_fill_str)
+        ocp=0
+        i=0
+        while(i < i_fill):
+            product_type = chr(random.randint(ord('A'),ord('Y')))
+            row = str(random.randint(1,5))
+            slot1 = str(random.randint(0,9))
+            slot2 = str(random.randint(0,9))
+            print("1"+product_type+row+slot1+slot2)
+            print("fill "+str(i+1)+" products")
+            print("slot is occupied: "+str(ocp))
+            store_st=self.store(product_type+row+slot1+slot2)
+            if(store_st==-3): i+=0
+            elif(store_st==-1): 
+                ocp+=1
+                
+            else: i+=1
+            '''if wh in range(1,4): row = random.randint(1,6)
+            if wh in range(4,5): row = random.randint(1,8)
+            if wh in range(5,6): row = random.randint(1,21)'''
+            
     def search(self,_cmd):
         if _cmd in self.move_temp:
             if self.move_temp[_cmd]=='-1':
@@ -256,6 +278,15 @@ class WarehouseManage():
         else: print("Found product at "+hx[0]+str(hx[1])+str(hx[2]))
     def command(self,_cmd):
         _cmd=_cmd.upper()
+        print(_cmd[0])
+        if _cmd[0]=='-':
+            print("It's coming...")
+            print(_cmd[1:6])
+            if _cmd[1:6]=='FILL ':
+                self.fill(_cmd[6:])
+                return 1
+            print("1-6 didn't work")
+
         if self.check(_cmd)==False:
             print("Wrong input \nDumb people!!! Didn't you read the intructions huh???")
             return -1
@@ -263,6 +294,7 @@ class WarehouseManage():
         #if (int(_cmd[2])>5 or int(_cmd[2])==0) :
         #    print("Wrong input!4")
         #    return -1
+        
         fn=int(_cmd[0])
         if fn==0: self.retrieve(_cmd[1:5])
         elif fn==1: self.store(_cmd[1:5])
