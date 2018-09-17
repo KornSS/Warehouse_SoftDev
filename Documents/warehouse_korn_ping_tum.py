@@ -254,10 +254,18 @@ class Warehouse():
         for row_index in range(len(self.row)):
             print("Product in row "+str(row_index+1)+": ",end='')
             printed=0
+            temp=''
+            #print(self.row[row_index])
             for slot_index in range(len(self.row[row_index])):
                 if(self.row[row_index][slot_index]!=''):
                     printed=1
-                    print(self.row[row_index][slot_index]+" ",end= ',' if slot_index!=len(self.row[row_index]) else '')
+                    if slot_index!=len(self.row[row_index]): temp=temp+self.row[row_index][slot_index]+','
+            len_temp=len(temp)
+            if len_temp>0:
+                if(temp[len(temp)-1]==','):
+                    temp=temp[:len(temp)-1]
+                print(temp,end='')
+            #print(temp,end='')    
             if(printed==0):print("-",end=" ")
             print("")
         print("")
