@@ -88,10 +88,10 @@ class WarehouseManage():
     def store(self,_cmd):
         if(_cmd in belt.element):
             print("Product is already on the belt")
-            return -1
+            return -2
         if(_cmd in self.move_temp):
             print("Product has already added")
-            return -1
+            return -3
         hx=self.hash(_cmd)
         st=eval("self."+hx[0]+".store"+"(\'"+_cmd+"\',"+str(hx[1])+','+str(hx[2])+")")
         #print(eval("self."+hx[0]+".store"+"(\'"+_cmd+"\',"+str(hx[1])+','+str(hx[2])+")"))
@@ -134,12 +134,33 @@ class WarehouseManage():
             else:
                 return False
         return False
-    def sort(self,x,y):
-        print("Sorting process for warehouse "+str(ord(x)-ord('A')+1)+" is complete")
+    
     move_temp={"A999":"B999"}
     def m_store(self,id,pos):
         hx=self.hash(id)
-        if(eval("self."+hx[0]+".retrieve"+"("+str(hx[1])+","+str(hx[2])+")")==-1):
+        if id in self.move_temp:
+            if self.move_temp[id]=='-1':
+                print("Cannot found the product with ID: "+id)
+                return -1
+            else:
+                print("id"+id)
+                pos2=self.move_temp[id]
+                #print("pos2"+pos2)
+                self.move_temp[pos2]=''
+                hx=self.hash(pos2)
+                eval("self."+hx[0]+".retrieve"+"(\'"+id+"\',"+str(hx[1])+","+str(hx[2])+")")
+                #print("pos"+pos)
+                self.move_temp[id]=pos
+                hx=self.hash(pos)
+                eval("self."+hx[0]+".store"+"(\'"+id+"\',"+str(hx[1])+','+str(hx[2])+")")
+                #print("movetempid:"+self.move_temp[id])
+                self.move_temp[pos]='-1'
+                hx=self.hash(pos)
+                eval("self."+hx[0]+".store"+"(\'"+"-1"+"\',"+str(hx[1])+','+str(hx[2])+")")
+                #print("movetemppos:"+self.move_temp[pos])
+                print("Move product "+id+" to "+pos)
+                return 1
+        if(eval("self."+hx[0]+".retrieve"+"(\'"+id+"\',"+str(hx[1])+","+str(hx[2])+")")==-1):
             print("Product id "+id+" not found")
             return -1
         hx=self.hash(pos)
@@ -152,6 +173,20 @@ class WarehouseManage():
         self.move_temp[id]=pos
         self.move_temp[pos]='-1'
         #print(self.move_temp)
+    def sort(self,x,y):
+        dup_product=[]
+        for i in eval("self."+chr(ord(x)-ord('1')+ord('A'))+".row["+str(int(y)-1)+"]"):
+            print("1"+i)
+            if i in self.move_temp:
+                print("2"+j)
+                if(self.store(j)==-1):
+                    dup_product.append(j)
+                pos=self.move_temp[j]
+                self.retrieve(pos)
+                self.move_temp[j]=''
+                self.move_temp[pos]=''
+                pos=self.move_temp[self]
+        print("Sorting process for warehouse "+str(int(x))+" is complete")
     def search(self,_cmd):
         if _cmd in self.move_temp:
             if self.move_temp[_cmd]=='-1':
@@ -228,8 +263,8 @@ class Warehouse():
 
         if self.row[row_index][slot_index]=="":
             self.row[row_index][slot_index]=product
-        elif  self.row[row_index][slot_index]==product:
             self.number_of_product+=1
+        elif  self.row[row_index][slot_index]==product:
             return 1
             
         else: return -1
