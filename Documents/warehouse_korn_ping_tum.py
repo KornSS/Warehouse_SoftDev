@@ -7,6 +7,8 @@ class WarehouseManage():
         self.D = Warehouse('D')
         self.E = Warehouse('E')
 
+        self.belt = beltCreator()
+
     def __init__(self):
         self.FactoryMethod()    
     
@@ -82,11 +84,11 @@ class WarehouseManage():
         print("Retriving a product id "+_cmd+" in warehouse "+str(ord(hx[0])-ord('A')+1)+": "+"row "+str(hx[1])+" slot "+str(hx[2]))
         self.links(hx[0],'BKD')
         print("Placing product id "+_cmd+" on the belt")
-        belt.store(_cmd)
+        self.belt.store(_cmd)
         print("Retrieving successfully!")
 
     def store(self,_cmd):
-        if(_cmd in belt.element):
+        if(_cmd in self.belt.element):
             print("Product is already on the belt")
             return -2
         if(_cmd in self.move_temp):
@@ -265,7 +267,7 @@ class WarehouseManage():
         if fn==0: self.retrieve(_cmd[1:5])
         elif fn==1: self.store(_cmd[1:5])
         elif fn==2: self.sort(_cmd[1],_cmd[2:4])
-        elif fn==3: belt.retrieve()
+        elif fn==3: self.belt.retrieve()
         elif fn==4: self.summary()
         elif fn==5: self.search(_cmd[1:5])
         elif fn==6: print(self.move_temp)
@@ -275,6 +277,7 @@ class WarehouseManage():
             return -1
 
         #self.A.store('A125',1,25)
+        
 class Warehouse():
 
     def __init__(self,name):
@@ -339,28 +342,27 @@ class Warehouse():
     def search(self,row_index,slot_index):
         if self.row[row_index][slot_index]=="": return False
 
-# Create object using factory.
-obj = WarehouseManage()
 
-class belt():
+class beltCreator():
     element=[]
-    @staticmethod
-    def store(product):
-        if(len(belt.element)>=10):
+    def store(self,product):
+        if(len(self.element)>=10):
             print("Belt is full. Cannot retrieve the product.")
-        belt.element.append(product)
+        self.element.append(product)
         #print(belt.element)
         return True
-    @staticmethod
-    def retrieve():
-        if len(belt.element)==0:
+    def retrieve(self):
+        if len(self.element)==0:
             print("The belt is empty")
             return False
-        pop_element=belt.element.pop(0)
+        pop_element=self.element.pop(0)
         if pop_element in WarehouseManage.move_temp:
             del WarehouseManage.move_temp[pop_element]
         print("Retrieve a product with id "+pop_element+" from the belt")
-        print("The belt now have "+str(len(belt.element))+" products on the line")
+        print("The belt now have "+str(len(self.element))+" products on the line")
+
+
+obj = WarehouseManage()
 
 while(1):
     x=input("Please type a command...")
