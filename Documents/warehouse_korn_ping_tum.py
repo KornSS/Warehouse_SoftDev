@@ -104,8 +104,8 @@ class WarehouseManage():
                 print("Slot is occupied")
                 return -1
             elif(st==1):
-                    print("Product has already added")
-                    return -3
+                print("Product has already added")
+                return -3
 
         elif(st==1):
                 print("Product has already added")
@@ -258,7 +258,7 @@ class WarehouseManage():
             if(store_st==-3): i+=0
             elif(store_st==-1): 
                 ocp+=1
-                
+                if(ocp > 9750):return -2
             else: i+=1
             '''if wh in range(1,4): row = random.randint(1,6)
             if wh in range(4,5): row = random.randint(1,8)
