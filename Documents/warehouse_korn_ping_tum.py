@@ -143,10 +143,10 @@ class WarehouseManage():
                 print("Cannot found the product with ID: "+id)
                 return -1
             else:
-                print("id"+id)
+                #print("id"+id)
                 pos2=self.move_temp[id]
                 #print("pos2"+pos2)
-                self.move_temp[pos2]=''
+                del self.move_temp[pos2]
                 hx=self.hash(pos2)
                 eval("self."+hx[0]+".retrieve"+"(\'"+id+"\',"+str(hx[1])+","+str(hx[2])+")")
                 #print("pos"+pos)
@@ -176,16 +176,19 @@ class WarehouseManage():
     def sort(self,x,y):
         dup_product=[]
         for i in eval("self."+chr(ord(x)-ord('1')+ord('A'))+".row["+str(int(y)-1)+"]"):
-            print("1"+i)
+            #print("1"+i)
             if i in self.move_temp:
-                print("2"+j)
-                if(self.store(j)==-1):
-                    dup_product.append(j)
-                pos=self.move_temp[j]
-                self.retrieve(pos)
-                self.move_temp[j]=''
-                self.move_temp[pos]=''
-                pos=self.move_temp[self]
+                #print("2"+i)
+                if(self.store(i)==-1):
+                    dup_product.append(i)
+                pos=self.move_temp[i]
+                hx=self.hash(pos)
+                del self.move_temp[i]
+
+                del self.move_temp[pos]
+                eval("self."+hx[0]+".retrieve"+"(\'"+i+"\',"+str(hx[1])+","+str(hx[2])+")")
+                self.store(i)          
+                
         print("Sorting process for warehouse "+str(int(x))+" is complete")
     def search(self,_cmd):
         if _cmd in self.move_temp:
