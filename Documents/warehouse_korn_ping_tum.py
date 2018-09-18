@@ -391,8 +391,8 @@ class beltCreator():
             print("The belt is empty")
             return False
         pop_element=self.element.pop(0)
-        if pop_element in WarehouseManage.move_temp:
-            del WarehouseManage.move_temp[pop_element]
+        if pop_element in WarehouseManager.move_temp:
+            del WarehouseManager.move_temp[pop_element]
         print("Retrieve a product with id "+pop_element+" from the belt")
         print("The belt now have "+str(len(self.element))+" products on the line")
 
